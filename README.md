@@ -1,5 +1,8 @@
 # EXPERIMENT-06-INTERRUPT-GENERATION-USING-PUSHBUTTON-AND-SIMULATING-THE-OUTPUT
-
+```
+Name : MURALI S
+Reg.No : 212222230088
+```
 ### Aim:
 To Interface a push button and generate an interrupt , simulate it using an led and simuate it on  proteus 
 
@@ -89,48 +92,31 @@ https://engineeringxpert.com/wp-content/uploads/2022/04/26.png
   
 
 ## STM 32 CUBE PROGRAM :
-```
+```c
 #include "main.h"
-#include"stdio.h"
-
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-
- 
 int main(void)
 {
-  
-  HAL_Init();
-
-  SystemClock_Config();
-
- 
-  MX_GPIO_Init();
-  
-  
+   HAL_Init();
+   SystemClock_Config();
+   MX_GPIO_Init();
   while (1)
-  {
-    
   }
-}
- void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-  {
-  	if((GPIO_Pin==GPIO_PIN_1))
-  	{
-  		HAL_GPIO_TogglePin(GPIOA,GPIO_PIN_0);
-  	}
-}
 
-
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+	if(GPIO_Pin == GPIO_PIN_9)
+	{
+		HAL_GPIO_TogglePin(GPIOA,GPIO_PIN_11);
+	}
+}
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
-
-  
   __HAL_RCC_PWR_CLK_ENABLE();
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE2);
-  
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
@@ -144,7 +130,6 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
@@ -157,56 +142,45 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 }
-
-
 static void MX_GPIO_Init(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
-
- 
   __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
-
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_RESET);
-
-  
-  GPIO_InitStruct.Pin = GPIO_PIN_0;
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, GPIO_PIN_RESET);
+  GPIO_InitStruct.Pin = GPIO_PIN_9;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+  GPIO_InitStruct.Pin = GPIO_PIN_11;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
- 
-  GPIO_InitStruct.Pin = GPIO_PIN_1;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-
-  HAL_NVIC_SetPriority(EXTI1_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(EXTI1_IRQn);
-
+  HAL_NVIC_SetPriority(EXTI9_5_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
 }
-
 
 void Error_Handler(void)
 {
-  
-  __disable_irq();
+    __disable_irq();
   while (1)
-  {
   }
+
+#ifdef  USE_FULL_ASSERT
+void assert_failed(uint8_t *file, uint32_t line)
+{
 }
+#endif
+
 ```
-
-
 ## Output screen shots of proteus  :
- ![WhatsApp Image 2023-05-26 at 14 53 24](https://github.com/MURALI22008445/EXPERIMENT-06-INTERRUPT-GENERATION-USING-PUSHBUTTON-AND-SIMULATING-THE-OUTPUT-/assets/119643767/5ab489bb-10c4-46fa-a41d-ac5f25bb70f3)
-![WhatsApp Image 2023-05-26 at 14 53 24](https://github.com/MURALI22008445/EXPERIMENT-06-INTERRUPT-GENERATION-USING-PUSHBUTTON-AND-SIMULATING-THE-OUTPUT-/assets/119643767/06d5525b-13ab-4cd2-b7b3-c5469abcb9e2)
+ ![image](https://github.com/user-attachments/assets/31f768e0-73f2-4066-82d0-388bff24d031)
 
- 
+ ![image](https://github.com/user-attachments/assets/d969c9f8-bf2f-4de9-b177-764f7ea01a86)
+
  ## CIRCUIT DIAGRAM (EXPORT THE GRAPHICS TO PDF AND ADD THE SCREEN SHOT HERE): 
- ![WhatsApp Image 2023-05-26 at 14 53 25](https://github.com/MURALI22008445/EXPERIMENT-06-INTERRUPT-GENERATION-USING-PUSHBUTTON-AND-SIMULATING-THE-OUTPUT-/assets/119643767/94b25c43-c70f-4d5d-976b-c906fe0b8b31)
+ ![WhatsApp Image 2024-10-16 at 10 52 32_8353d5ea](https://github.com/user-attachments/assets/a3faf0f7-34fa-43ab-8043-17d7e55f094e)
 
  
 ## Result :
